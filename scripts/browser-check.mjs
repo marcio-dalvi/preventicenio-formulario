@@ -18,6 +18,15 @@ try {
     await route.fulfill({ json: mode === 'missing' ? { erro: true } : { logradouro: 'Praça da Sé', bairro: 'Sé', localidade: 'São Paulo', uf: 'SP' } });
   });
   assert.equal((await page.goto('http://127.0.0.1:3000')).status(), 200);
+  await page.evaluate(() => document.fonts.ready);
+  assert.match(await page.title(), /Prevent Senior/);
+  assert.equal(await page.locator('.brand-logo').getAttribute('alt'), 'Prevent Senior');
+  assert.ok(await page.locator('.brand-logo').evaluate(img => img.complete && img.naturalWidth > 0));
+  assert.ok(await page.evaluate(() => document.fonts.check('400 14px Poppins')));
+  assert.match(await page.locator('body').innerText(), /Prevent Senior/);
+  assert.doesNotMatch(await page.locator('body').innerText(), /Preventicênio/i);
+  assert.equal(await page.locator('button').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(24, 76, 160)');
+  console.log('PASS: título, logo oficial carregado, fonte Poppins local e azul #184ca0; marca antiga ausente.');
   await page.screenshot({ path: `${output}/desktop.png`, fullPage: true });
   await page.getByRole('button', { name: 'Salvar cadastro' }).click();
   assert.ok(await page.locator('[aria-invalid=true]').count() >= 15);
@@ -36,6 +45,7 @@ try {
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Salvar cadastro' }).click();
   const download = await downloadPromise;
+  assert.equal(download.suggestedFilename(), 'preventsenior-cadastro.json');
   await download.saveAs(`${output}/cadastro-pj.json`);
   const data = JSON.parse(await readFile(`${output}/cadastro-pj.json`, 'utf8'));
   assert.equal(data.documento, '11222333000181');

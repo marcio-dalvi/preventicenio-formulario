@@ -1,23 +1,26 @@
-# Preventicênio — atualização cadastral
+﻿# Prevent Senior — atualização cadastral
 
-Formulário estático responsivo para pessoa jurídica e física. Identidade visual neutra, sem logo oficial fornecido. Dados preenchidos permanecem no navegador, sem armazenamento persistente, analytics ou backend. O botão **Salvar cadastro** valida e baixa `preventicenio-cadastro.json`; não registra nem envia cadastro. Somente o CEP é enviado ao ViaCEP (https://viacep.com.br/), com timeout e opção de preenchimento manual em falha de rede.
+Formulário estático responsivo PJ/PF, com validação de CPF/CNPJ numéricos, CEP, e-mail e telefone. Salvar baixa `preventsenior-cadastro.json`; dados cadastrais não são enviados ou persistidos. Apenas o CEP é consultado no ViaCEP, com preenchimento manual em falhas de rede.
 
-## Executar
+Ambiente de demonstração. Identidade baseada no site oficial; fontes, cores e origem do logo em [BRAND.md](BRAND.md).
 
-Requer Node.js moderno, sem dependências externas.
+## Executar e compilar
+
+Requer Node.js compatível com Vite 8 e dependências do package-lock.json instaladas.
 
 ```sh
-node scripts/build.mjs
+npm ci
+npm run build
 node --test
 node scripts/serve.mjs
 ```
 
-Abra http://127.0.0.1:3000. O build gera `dist/` e `docs/` com os mesmos arquivos e caminhos relativos, compatíveis com subdiretórios do GitHub Pages. Scripts equivalentes estão no package.json. O cadastro exporta CPF/CNPJ numéricos; Inscrição Estadual/RG são opcionais. CPF/CNPJ usam dígitos verificadores; essa validação não consulta situação cadastral. Exportação disponível em JSON (PDF não implementado).
+O build também pode ser executado com `node scripts/build.mjs`. Usa a API de produção do Vite para gerar docs/ e dist/, com caminhos relativos, fontes locais e .nojekyll. Servidor local: http://127.0.0.1:3000 (dist/). Build e testes não publicam.
 
-## Publicação pendente de autorização
+## GitHub Pages
 
-Nenhuma publicação ou push é executado pelos testes ou pelo build. O repositório Git local é o entregável desta etapa. Após autorização explícita do Marcio e decisão do Diretor sobre branch, criar/associar o repositório no GitHub com `gh`, enviar o commit e configurar Pages para o branch aprovado, pasta `/docs`. Não existe URL publicada nesta entrega.
+URL existente: https://marcio-dalvi.github.io/preventicenio-formulario/ (master, /docs). Nova identidade preparada localmente; o mandato t_4002d2a4 também contém uma proibição final explícita de push/PR no checkout compartilhado, portanto a republicação depende de resolver essa restrição.
 
 ## Verificação
 
-`node --test` verifica os algoritmos e máscaras com dados sintéticos. Evidências da tarefa em `C:/Users/marci/AppData/Local/hermes/kanban/evidencias/t_3cecbd2e.md`. Capturas e teste de navegador usam somente dados sintéticos.
+`node --test` verifica documentos, e-mail, telefone e máscaras com dados sintéticos. `scripts/browser-check.mjs` recebe o módulo Playwright e, opcionalmente, o executável Chromium como argumentos; cobre validações, CEP, downloads PJ/PF, marca e responsividade em 390/320 px. Artefatos ficam em test-results/ (ignorado pelo Git).

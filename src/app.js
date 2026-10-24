@@ -97,7 +97,7 @@ form.addEventListener('submit', event => {
   const contact = prefix => ({ nome: values[`${prefix}Nome`], email: values[`${prefix}Email`], telefone: digits(values[`${prefix}Telefone`]) });
   const data = { versao: 1, geradoEm: new Date().toISOString(), simulacao: true, tipoPessoa: values.tipo, nome: values.nome, documento: digits(values.documento), registro: values.registro, endereco: { cep: digits(values.cep), logradouro: values.logradouro, numero: values.numero, complemento: values.complemento, bairro: values.bairro, cidade: values.cidade, uf: values.uf }, telefone: digits(values.telefone), email: values.email, responsavelLegal: contact('responsavel'), contatoFinanceiro: contact('financeiro'), contatoTecnico: contact('tecnico') };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8' }));
-  const link = Object.assign(document.createElement('a'), { href: url, download: 'preventicenio-cadastro.json' });
+  const link = Object.assign(document.createElement('a'), { href: url, download: 'preventsenior-cadastro.json' });
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   result.textContent = 'Arquivo JSON gerado. Confira o download no navegador. Nenhum cadastro foi enviado.';
